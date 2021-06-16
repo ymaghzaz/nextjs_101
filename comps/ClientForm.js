@@ -1,50 +1,45 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 
-class ClientForm extends Component {
-  state = {
-    newName: "",
-    newNum: ""
-  };
+const ClientForm = (props) => {
+  const [name, setName] = useState("");
+  const [num, setNum] = useState("");
+  const [rendreNumber, setRendredNumber] = useState(0);
 
-  handleNameChange = event => {
-    this.setState({ newName: event.currentTarget.value });
-  };
+  useEffect(() => {
+    console.log("init component");
+  }, []);
 
-  handleNumChange = event => {
-    this.setState({ newNum: event.currentTarget.value })
-  }
+  useEffect(() => {
+    setRendredNumber((o) => o + 1);
+  }, [name, num]);
 
-  handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-
     const id = new Date().getTime();
-    const name = this.state.newName;
-    const number = this.state.newNum;
-
-    this.props.onClientAdd({ id, name, number });
-
-    this.setState({ nouveauClient: "" });
+    props.onClientAdd({ id, name, number: num });
+    setName("");
+    setNum("");
   };
 
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <input
-          value={this.state.newName}
-          onChange={this.handleNameChange}
-          type="text"
-          placeholder="Ajouter un nom"
-        />
-        <input
-          value={this.state.newNum}
-          onChange={this.handleNumChange}
-          type="text"
-          placeholder="Ajouter un numero"
-        />
-        <button>Confirmer</button>
-      </form>
-    );
-  }
-}
+  return (
+    <form onSubmit={handleSubmit}>
+      <span>{rendreNumber}</span>
+      <br />
+      <input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        type="text"
+        placeholder="Ajouter un nom"
+      />
+      <input
+        value={num}
+        onChange={(e) => setNum(e.target.value)}
+        type="text"
+        placeholder="Ajouter un numero"
+      />
+      <button>Confirmer</button>
+    </form>
+  );
+};
 
 export default ClientForm;
